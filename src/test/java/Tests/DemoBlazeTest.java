@@ -1,42 +1,50 @@
 package Tests;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import Pages.home_category;
+import Pages.DemoBlazePOM;
 import resources.DriverManager;
 
-public class Test1_chooseCategory {
+public class DemoBlazeTest {
     private WebDriver driver;
-    private DriverManager driverManager;
+    private DemoBlazePOM demoBlaze;
 
     @BeforeMethod
     public void setUp() {
-        // Initialize the WebDriver and resources.DriverManager
-        driverManager = new DriverManager();
+        DriverManager driverManager = new DriverManager();
+        //driverManager.setHeadlessMode(); // Set headless mode if needed
         driver = driverManager.getDriver();
+        demoBlaze = new DemoBlazePOM(driver);
     }
+
 
     @AfterMethod
     public void tearDown() {
-        // Close the WebDriver after each test method
-        //driverManager.closeAfterExecution();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @Test
     public void testScenario_ChoosePhoneCategory() {
-        home_category homeCategoryPage = new home_category(driver);
+        demoBlaze.navigateToHomePage();
+        demoBlaze.choosePhonesCategory();
+        demoBlaze.selectProductByName("Samsung galaxy s6");
 
-        driverManager.navigateTo("https://www.demoblaze.com/index.html");
-        homeCategoryPage.clickPhonesCategory();
+        String cartLinkText = demoBlaze.getCartLinkText();
+        // You can add assertions to validate the test results.
     }
 
     @Test
     public void testScenario_chooseLaptopCategory() {
-        home_category homeCategoryPage = new home_category(driver);
+        demoBlaze.navigateToHomePage();
+        demoBlaze.chooseLaptopsCategory();
+        demoBlaze.selectProductByName("Sony vaio i5");
 
-        driverManager.navigateTo("https://www.demoblaze.com/index.html");
-        homeCategoryPage.clickLaptopsCategory();
+        String cartLinkText = demoBlaze.getCartLinkText();
+        // You can add assertions to validate the test results.
     }
 }
